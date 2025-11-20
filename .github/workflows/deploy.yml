@@ -1,4 +1,8 @@
 name: deploy
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 on:
   workflow_dispatch:
@@ -26,7 +30,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - run: npm install --global vercel@latest
 
       - name: Fetch slides from external repository
         run: |
@@ -104,39 +109,25 @@ jobs:
 
           echo "Slides fetching complete. Found $(grep -c '"date"' "$SLIDES_DIR/slides-data.json" 2>/dev/null || echo 0) presentations."
 
-      - name: Verify generated files
+      - name: Build for Vercel
         run: |
-          echo "=== Verifying directory structure ==="
-          echo "Current directory contents:"
-          ls -la
-          echo ""
-          echo "=== Tree view of important directories ==="
-          # Install tree if not available
-          which tree || sudo apt-get install -y tree
-          echo ""
-          echo "Root directory structure:"
-          tree -L 2 -a -I '.git|node_modules' .
-          echo ""
-          echo "=== Slides directory structure ==="
-          if [ -d "slides" ]; then
-            tree -L 3 slides/
-            echo ""
-            echo "=== Content of slides-data.json ==="
-            cat slides/slides-data.json
-          else
-            echo "WARNING: slides directory does not exist!"
-          fi
-          echo ""
-          echo "=== Checking critical files ==="
-          for file in "index.html" "slides.html" "pub.html" "team.html" "main.js" "assets/tailwind.js" "slides/slides-data.json" "tailwindcss"; do
-            if [ -f "$file" ]; then
-              echo "✓ $file exists ($(stat -c%s "$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null) bytes)"
-            else
-              echo "✗ $file is missing!"
-            fi
-          done
+          mkdir -p .vercel/output/static
+          cp -r * .vercel/output/static/ 2>/dev/null || true
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-      - uses: actions/deploy-pages@v4
+          cat > .vercel/output/config.json <<EOF
+          {
+            "version": 3,
+            "routes": [
+              {
+                "handle": "filesystem"
+              }
+            ]
+          }
+          EOF
+
+          echo "Build complete. Files prepared in .vercel/output/"
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
