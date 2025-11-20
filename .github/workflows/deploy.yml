@@ -65,7 +65,6 @@ jobs:
 
                 if [ -f "$date_dir/index.html" ]; then
                   echo "Found index.html for $dirname"
-
                   mkdir -p "$SLIDES_DIR/$dirname"
 
                   cp "$date_dir/index.html" "$SLIDES_DIR/$dirname/index.html"
