@@ -30,7 +30,7 @@ jobs:
 
       - name: Fetch slides from external repository
         run: |
-          set -e
+          set +e
           echo "Fetching slides from external repository..."
 
           SLIDES_DIR="slides"
