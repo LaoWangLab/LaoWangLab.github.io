@@ -51,6 +51,8 @@
                     <span class="text-gray-400">|</span>
                     <a href="pub.html" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.publications">Publications</a>
                     <span class="text-gray-400">|</span>
+                    <a href="slides.html" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.slides">Slides</a>
+                    <span class="text-gray-400">|</span>
                     <a href="team.html" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.team">Team (We Are Hiring)</a>
                     <span class="text-gray-400">|</span>
                     <a href="https://cloud.umami.is/share/02nKZkui0S6JgesC/wangzigan.com" target="_blank" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.analytics">Analytics</a>

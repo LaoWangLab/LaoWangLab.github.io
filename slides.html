@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Zigan Wang">
+    <meta name="description" content="Presentation slides by Zigan Wang - Associate Professor at Tsinghua University">
+    <meta name="keywords" content="Zigan Wang, Presentations, Slides, Economics, Finance, Research">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="en-US">
+    <link rel="canonical" href="https://wangzigan.com/slides.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wangzigan.com/slides.html">
+    <meta property="og:title" content="Slides - Zigan Wang">
+    <meta property="og:description" content="Presentation slides by Zigan Wang">
+    <meta property="og:image" content="https://wangzigan.com/assets/avatar.webp">
+    <meta property="og:site_name" content="Zigan Wang Academic Homepage">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://wangzigan.com/slides.html">
+    <meta property="twitter:title" content="Slides - Zigan Wang">
+    <meta property="twitter:description" content="Presentation slides by Zigan Wang">
+    <meta property="twitter:image" content="https://wangzigan.com/assets/avatar.webp">
+
+    <title>Slides - Zigan Wang | Tsinghua University</title>
+
+    <link rel="dns-prefetch" href="https://github.com">
+    <link rel="preconnect" href="https://cloud.umami.is" crossorigin>
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="7f56cefd-a772-4a4d-88e9-0ff745c0574b"></script>
+    <script src="assets/tailwind.js"></script>
+    <style type="text/tailwindcss">
+        @import "tailwindcss";
+        @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+        @theme {
+            --color-primary: #005fa9;
+            --color-primary-dark: #334d55;
+            --color-section: #006699;
+        }
+
+        .theme-toggle button.active {
+            background-color: white;
+            color: #1f2937;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .theme-toggle button.active {
+            background-color: #1f2937;
+            color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        [dir="rtl"] {
+            font-family: 'Arial Unicode MS', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .dark {
+            color-scheme: dark;
+        }
+
+        @media print {
+            nav button,
+            nav select,
+            #backToTop,
+            footer {
+                display: none !important;
+            }
+        }
+
+        .slide-card {
+            transition: all 0.3s ease;
+        }
+
+        .slide-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .slide-card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200 antialiased">
+    <div class="max-w-7xl mx-auto bg-white dark:bg-gray-800 shadow-sm min-h-screen flex flex-col">
+        <div id="header"></div>
+
+        <div class="flex flex-col md:flex-row flex-grow">
+            <div id="sidebar"></div>
+
+            <main class="flex-1 p-6 md:p-8 lg:p-10 bg-white dark:bg-gray-800">
+                <section class="mb-8">
+                    <h2 class="text-2xl font-bold text-section dark:text-blue-400 mb-6" data-i18n="sections.slides">Presentation Slides</h2>
+
+                    <div id="slides-container" class="space-y-6">
+                        <div class="text-gray-500 dark:text-gray-400 text-center py-12">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                            </svg>
+                            <p class="text-lg mb-2" data-i18n="slides.loading">Loading slides...</p>
+                            <p class="text-sm" data-i18n="slides.description">Presentation slides will be automatically loaded from the repository during deployment.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <div id="footer"></div>
+    </div>
+
+    <div id="back-to-top"></div>
+
+    <script src="main.js"></script>
+    <script>
+        // Load slides data from generated JSON file
+        async function loadSlides() {
+            const container = document.getElementById('slides-container');
+
+            try {
+                const response = await fetch('slides/slides-data.json');
+                if (!response.ok) throw new Error('Slides data not found');
+
+                const slides = await response.json();
+
+                if (slides.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-gray-500 dark:text-gray-400 text-center py-12">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <p class="text-lg mb-2">No slides available</p>
+                            <p class="text-sm">Slides will appear here once they are added to the repository.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const slidesByYear = {};
+                slides.forEach(slide => {
+                    const year = slide.date.substring(0, 4);
+                    if (!slidesByYear[year]) {
+                        slidesByYear[year] = [];
+                    }
+                    slidesByYear[year].push(slide);
+                });
+
+                const sortedYears = Object.keys(slidesByYear).sort((a, b) => b - a);
+
+                let html = '';
+                sortedYears.forEach(year => {
+                    html += `
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">${year}</h3>
+                            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    `;
+
+                    slidesByYear[year].forEach(slide => {
+                        const formattedDate = new Date(slide.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                        html += `
+                            <a href="slides/${slide.date}/index.html" target="_blank" class="slide-card block p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-8 h-8 text-primary dark:text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-medium text-gray-900 dark:text-gray-100 truncate">${slide.title || 'Presentation'}</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">${formattedDate}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.log('Slides data not yet available:', error);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadSlides);
+        } else {
+            loadSlides();
+        }
+    </script>
+</body>
+</html>
