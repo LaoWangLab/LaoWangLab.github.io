@@ -104,6 +104,38 @@ jobs:
 
           echo "Slides fetching complete. Found $(grep -c '"date"' "$SLIDES_DIR/slides-data.json" 2>/dev/null || echo 0) presentations."
 
+      - name: Verify generated files
+        run: |
+          echo "=== Verifying directory structure ==="
+          echo "Current directory contents:"
+          ls -la
+          echo ""
+          echo "=== Tree view of important directories ==="
+          # Install tree if not available
+          which tree || sudo apt-get install -y tree
+          echo ""
+          echo "Root directory structure:"
+          tree -L 2 -a -I '.git|node_modules' .
+          echo ""
+          echo "=== Slides directory structure ==="
+          if [ -d "slides" ]; then
+            tree -L 3 slides/
+            echo ""
+            echo "=== Content of slides-data.json ==="
+            cat slides/slides-data.json
+          else
+            echo "WARNING: slides directory does not exist!"
+          fi
+          echo ""
+          echo "=== Checking critical files ==="
+          for file in "index.html" "slides.html" "pub.html" "team.html" "main.js" "assets/tailwind.js" "slides/slides-data.json" "tailwindcss"; do
+            if [ -f "$file" ]; then
+              echo "✓ $file exists ($(stat -c%s "$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null) bytes)"
+            else
+              echo "✗ $file is missing!"
+            fi
+          done
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
