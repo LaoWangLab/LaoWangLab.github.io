@@ -99,7 +99,6 @@ jobs:
           echo ']' >> "$SLIDES_DIR/slides-data.json"
 
           rm -rf "$TEMP_DIR"
-
           if command -v jq &> /dev/null; then
             jq . "$SLIDES_DIR/slides-data.json" > /dev/null 2>&1 || {
               echo "Warning: Generated JSON is invalid. Creating empty array..."
