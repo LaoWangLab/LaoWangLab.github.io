@@ -60,6 +60,11 @@ jobs:
             if [ -d "$date_dir" ]; then
               dirname=$(basename "$date_dir")
 
+              if [ "$dirname" = "example" ]; then
+                echo "Skipping example folder..."
+                continue
+              fi
+
               if [[ $dirname =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
                 echo "Processing slides for date: $dirname"
 
@@ -71,14 +76,12 @@ jobs:
                   HAS_HTML=true
                 fi
 
-                # Check for PDF file (any .pdf file in the directory)
                 PDF_FILE=$(find "$date_dir" -maxdepth 1 -name "*.pdf" -type f | head -1)
                 if [ -n "$PDF_FILE" ]; then
                   HAS_PDF=true
                   PDF_FILENAME=$(basename "$PDF_FILE")
                 fi
 
-                # Only process if we have at least HTML or PDF
                 if [ "$HAS_HTML" = true ] || [ "$HAS_PDF" = true ]; then
                   mkdir -p "$SLIDES_DIR/$dirname"
 
@@ -92,7 +95,6 @@ jobs:
                       title=$(grep -o '<title>[^<]*</title>' "$date_dir/index.html" | sed 's/<[^>]*>//g' | head -1)
                     fi
                   elif [ "$HAS_PDF" = true ]; then
-                    # Extract title from PDF filename (remove .pdf extension and replace underscores with spaces)
                     title=$(echo "$PDF_FILENAME" | sed 's/\.pdf$//' | tr '_' ' ')
                   fi
 
@@ -107,7 +109,6 @@ jobs:
                     FIRST_ENTRY=false
                   fi
 
-                  # Build JSON entry with optional pdf field
                   if [ "$HAS_PDF" = true ]; then
                     cat >> "$SLIDES_DIR/slides-data.json" <<EOF
             {
