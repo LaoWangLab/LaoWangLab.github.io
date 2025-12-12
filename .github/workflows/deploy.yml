@@ -63,16 +63,42 @@ jobs:
               if [[ $dirname =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
                 echo "Processing slides for date: $dirname"
 
-                if [ -f "$date_dir/index.html" ]; then
-                  echo "Found index.html for $dirname"
-                  mkdir -p "$SLIDES_DIR/$dirname"
+                HAS_HTML=false
+                HAS_PDF=false
+                PDF_FILE=""
 
-                  cp "$date_dir/index.html" "$SLIDES_DIR/$dirname/index.html"
+                if [ -f "$date_dir/index.html" ]; then
+                  HAS_HTML=true
+                fi
+
+                # Check for PDF file (any .pdf file in the directory)
+                PDF_FILE=$(find "$date_dir" -maxdepth 1 -name "*.pdf" -type f | head -1)
+                if [ -n "$PDF_FILE" ]; then
+                  HAS_PDF=true
+                  PDF_FILENAME=$(basename "$PDF_FILE")
+                fi
+
+                # Only process if we have at least HTML or PDF
+                if [ "$HAS_HTML" = true ] || [ "$HAS_PDF" = true ]; then
+                  mkdir -p "$SLIDES_DIR/$dirname"
 
                   title="Presentation"
 
-                  if grep -q "<title>" "$date_dir/index.html"; then
-                    title=$(grep -o '<title>[^<]*</title>' "$date_dir/index.html" | sed 's/<[^>]*>//g' | head -1)
+                  if [ "$HAS_HTML" = true ]; then
+                    echo "Found index.html for $dirname"
+                    cp "$date_dir/index.html" "$SLIDES_DIR/$dirname/index.html"
+
+                    if grep -q "<title>" "$date_dir/index.html"; then
+                      title=$(grep -o '<title>[^<]*</title>' "$date_dir/index.html" | sed 's/<[^>]*>//g' | head -1)
+                    fi
+                  elif [ "$HAS_PDF" = true ]; then
+                    # Extract title from PDF filename (remove .pdf extension and replace underscores with spaces)
+                    title=$(echo "$PDF_FILENAME" | sed 's/\.pdf$//' | tr '_' ' ')
+                  fi
+
+                  if [ "$HAS_PDF" = true ]; then
+                    echo "Found PDF: $PDF_FILENAME for $dirname"
+                    cp "$PDF_FILE" "$SLIDES_DIR/$dirname/$PDF_FILENAME"
                   fi
 
                   if [ "$FIRST_ENTRY" = false ]; then
@@ -81,14 +107,27 @@ jobs:
                     FIRST_ENTRY=false
                   fi
 
-                  cat >> "$SLIDES_DIR/slides-data.json" <<EOF
+                  # Build JSON entry with optional pdf field
+                  if [ "$HAS_PDF" = true ]; then
+                    cat >> "$SLIDES_DIR/slides-data.json" <<EOF
             {
               "date": "$dirname",
-              "title": "$title"
+              "title": "$title",
+              "hasHtml": $HAS_HTML,
+              "pdf": "$PDF_FILENAME"
             }
           EOF
+                  else
+                    cat >> "$SLIDES_DIR/slides-data.json" <<EOF
+            {
+              "date": "$dirname",
+              "title": "$title",
+              "hasHtml": $HAS_HTML
+            }
+          EOF
+                  fi
                 else
-                  echo "Warning: No index.html found in $dirname, skipping..."
+                  echo "Warning: No index.html or PDF found in $dirname, skipping..."
                 fi
               fi
             fi
