@@ -5,7 +5,7 @@
         networkTimeout: 10000,
         retryAttempts: 3,
         retryDelay: 1000,
-        translationsCacheKey: 'translations_cache_v1',
+        translationsCacheKey: 'translations_cache_v2',
         translationsCacheExpiry: 7 * 24 * 60 * 60 * 1000,
         defaultLang: 'en-US',
         rtlLanguages: ['ar-SA', 'he-IL']
@@ -50,6 +50,8 @@
                     <a href="index.html" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.home">Home</a>
                     <span class="text-gray-400">|</span>
                     <a href="pub.html" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.publications">Publications</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="/research/assetbubble" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.research">Research</a>
                     <span class="text-gray-400">|</span>
                     <a href="slides.html" class="text-primary dark:text-blue-400 hover:underline font-medium" data-i18n="nav.slides">Slides</a>
                     <span class="text-gray-400">|</span>

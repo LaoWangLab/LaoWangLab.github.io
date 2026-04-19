@@ -3,6 +3,7 @@
     "nav": {
         "home": "홈",
         "publications": "논문 발표",
+        "research": "연구",
         "team": "팀 (채용 중)",
         "analytics": "분석"
     },

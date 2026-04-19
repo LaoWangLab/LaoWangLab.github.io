@@ -157,6 +157,11 @@ jobs:
             "version": 3,
             "routes": [
               {
+                "src": "^/research/assetbubble/?$",
+                "status": 308,
+                "headers": { "Location": "https://assets.m0nius.com" }
+              },
+              {
                 "handle": "filesystem"
               }
             ]
