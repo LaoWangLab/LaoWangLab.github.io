@@ -99,8 +99,8 @@ jobs:
                   fi
 
                   if [ "$HAS_PDF" = true ]; then
-                    echo "Found PDF: $PDF_FILENAME for $dirname"
-                    cp "$PDF_FILE" "$SLIDES_DIR/$dirname/$PDF_FILENAME"
+                    echo "Found PDF(s) for $dirname"
+                    cp "$date_dir"/*.pdf "$SLIDES_DIR/$dirname/"
                   fi
 
                   if [ "$FIRST_ENTRY" = false ]; then
@@ -109,7 +109,7 @@ jobs:
                     FIRST_ENTRY=false
                   fi
 
-                  if [ "$HAS_PDF" = true ]; then
+                  if [ "$HAS_PDF" = true ] && [ "$HAS_HTML" = false ]; then
                     cat >> "$SLIDES_DIR/slides-data.json" <<EOF
             {
               "date": "$dirname",
