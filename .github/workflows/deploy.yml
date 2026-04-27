@@ -89,7 +89,7 @@ jobs:
 
                   if [ "$HAS_HTML" = true ]; then
                     echo "Found index.html for $dirname"
-                    cp "$date_dir/index.html" "$SLIDES_DIR/$dirname/index.html"
+                    cp "$date_dir"/*.html "$SLIDES_DIR/$dirname/"
 
                     if grep -q "<title>" "$date_dir/index.html"; then
                       title=$(grep -o '<title>[^<]*</title>' "$date_dir/index.html" | sed 's/<[^>]*>//g' | head -1)
